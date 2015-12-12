@@ -6,7 +6,10 @@ QueueList = React.createClass({
     // Grab the data
     getMeteorData() {
         return {
-            queuers: Queuers.find({}).fetch(),
+            queuers: Queuers.find({
+                seated: false,
+                removed: false
+            }, {sort: {date: 1}}).fetch(),
             currentUser: Meteor.user()
         };
     },
@@ -26,7 +29,7 @@ QueueList = React.createClass({
     // Clear Queue
     clearQueue() {
         if (confirm('Are you sure want to clear the queue?')) {
-            Meteor.call('queueClear', (error, result) => {
+            Meteor.call('queueClear', Meteor.userId(), (error, result) => {
                 if (error) {
                     return toastr.error(error.message);
                 }
@@ -36,7 +39,7 @@ QueueList = React.createClass({
 
     // Route to submit
     submitRoute() {
-        FlowRouter.go('/submit');
+        FlowRouter.go('/' + this.data.currentUser.username.toString() + '/submit');
     },
 
     // Render Function

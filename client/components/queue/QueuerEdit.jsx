@@ -1,62 +1,30 @@
-// Submit queuer componenet
-QueueSubmit = React.createClass({
-    // Get data functionality
-    mixins: [ReactMeteorData],
-
-    // Grab the data
-    getMeteorData() {
-        return {
-            currentUsername: Meteor.user().username
-        };
-    },
-
-    // Component is all loaded and ready to go
-    componentDidMount() {
-        let nameInput = this.refs.nameInput;
-
-        nameInput.focus();
-    },
-
-    // Submit a queuer into the list
-    submitQueuer(e) {
+QueuerEdit = React.createClass({
+    // Update the appropriate queuer
+    editQueuer(e) {
         e.preventDefault();
 
-        // Grab queuer data via string references
         let queuer = {
-            name: toTitleCase(this.refs.nameInput.value),
+            _id: this.props.queuerId,
+            name: toTitleCase(trimInput(this.refs.nameInput.value)),
             partySize: this.refs.partySizeInput.value,
             phoneNumber: this.refs.phoneInput.value
         };
 
-        // Queuer info must be available
-        if (queuer.name === '' || queuer.partySize === '') {
-            return toastr.error('Name and party size required!');
-        }
-
-        // Phone number must be max if ten characters
-        if ((queuer.phoneNumber.toString().length < 10)
-            && queuer.phoneNumber !== '') {
-            return toastr.error('Please include area code');
-        }
-
-        // Call the queuerInsert method to insert a queuer to the list
-        Meteor.call('queuerInsert', queuer, (error, result) => {
+        Meteor.call('queuerUpdate', queuer, (error) => {
             if (error) {
-                console.log(error);
                 return toastr.error(error.message);
             }
 
-            let routeString = '/' + this.data.currentUsername.toString() + '/queue';
-
-            FlowRouter.go(routeString);
+            FlowRouter.go('/' + Meteor.user().username + '/queue');
+            toastr.success('Updated');
         });
     },
 
-    // Render Function
+    // main render function
     render() {
         return (
-            <div className="queue-submit">
-                <h1>Submit</h1>
+            <div className="queue-edit">
+                <h1>Edit "{this.props.queuerName}"</h1>
                 <hr />
                 <form>
                     <div className="form-group">
@@ -87,8 +55,10 @@ QueueSubmit = React.createClass({
                         />
                     </div>
                     <div className="form-group">
-                        <button onClick={this.submitQueuer} className="btn btn-primary">
-                            Submit
+                        <button
+                            onClick={this.editQueuer}
+                            className="btn btn-warning">
+                            Edit
                         </button>
                     </div>
                 </form>

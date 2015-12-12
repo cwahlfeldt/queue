@@ -6,7 +6,7 @@ AccountLogin = React.createClass({
     // Get the current user
     getMeteorData() {
         return {
-            currentUserId: Meteor.userId()
+            currentUser: Meteor.user()
         };
     },
 
@@ -26,7 +26,7 @@ AccountLogin = React.createClass({
             password = this.refs.passwordInput.value;
 
         // attempt a login with the credentials from above
-        Meteor.loginWithPassword(username, password, function(error) {
+        Meteor.loginWithPassword(username, password, (error) => {
             if (error) {
                 toastr.error(error.message);
                 return console.log('Login Error: ' + error);
@@ -34,7 +34,7 @@ AccountLogin = React.createClass({
                 console.log('Login successful');
             }
 
-            let routeString = '/queue/' + Meteor.userId().toString();
+            let routeString = '/' + Meteor.user().username + '/queue';
             FlowRouter.go(routeString);
         });
 

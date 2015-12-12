@@ -6,8 +6,7 @@ Header = React.createClass({
     // Get the current user
     getMeteorData() {
         return {
-            currentUser: Meteor.user(),
-            currentUserId: Meteor.userId()
+            currentUser: Meteor.user()
         };
     },
 
@@ -23,7 +22,9 @@ Header = React.createClass({
 
     // Logout route
     accountLogout() {
-        Meteor.logout();
+        if (confirm('Are you sure you want to logout?')) {
+            Meteor.logout();
+        }
         FlowRouter.go('/');
     },
 
@@ -34,8 +35,7 @@ Header = React.createClass({
 
     // Queue route
     queueRoute() {
-        let routeString = '/queue/' + this.data.currentUserId.toString();
-
+        let routeString = '/' + this.data.currentUser.username.toString() + '/queue';
         FlowRouter.go(routeString);
     },
 

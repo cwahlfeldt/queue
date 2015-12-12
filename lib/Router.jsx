@@ -3,10 +3,10 @@
 };*/
 
 // Defines the public routes
-var exposed = FlowRouter.group({});
+const exposed = FlowRouter.group({});
 
 // Defines the private routes
-var admin = FlowRouter.group({
+const admin = FlowRouter.group({
     // Allows routes for authrized users only
     triggersEnter: [(context, redirect) => {
         if (Meteor.loggingIn() || Meteor.userId()) {
@@ -15,13 +15,14 @@ var admin = FlowRouter.group({
             toastr.error('Access Denied');
             FlowRouter.go('/login');
         }
-    }]
+    }],
+    prefix: '/:username',
+    subscriptions() {
+        Meteor.subscribe('queuers', Meteor.userId());
+    }
 });
 
-//
-// exposed Routes
-//
-exposed.notFound = {
+FlowRouter.notFound = {
     name: '404',
     action() {
         ReactLayout.render(App, {
@@ -29,6 +30,10 @@ exposed.notFound = {
         });
     }
 };
+
+//
+// exposed Routes
+//
 
 exposed.route('/', {
     name: 'Home',
@@ -78,14 +83,9 @@ exposed.route('/password-reset/:token', {
 //
 // admin Routes
 //
-admin.route('/queue/:userId', {
+admin.route('/queue', {
     name: 'Queue',
-    subscriptions(params, queryParams) {
-        Meteor.subscribe('queuers', params.userId);
-    },
-    action(params, queryParams) {
-        console.log(params.userId);
-
+    action() {
         ReactLayout.render(App, {
             content: <QueueList />
         });
@@ -97,6 +97,15 @@ admin.route('/submit', {
     action() {
         ReactLayout.render(App, {
             content: <QueueSubmit />
+        });
+    }
+});
+
+admin.route('/edit/:queuerName/:queuerId', {
+    name: 'Edit',
+    action(params, queryParams) {
+        ReactLayout.render(App, {
+            content: <QueuerEdit queuerId={params.queuerId} queuerName={params.queuerName} />
         });
     }
 });

@@ -6,7 +6,7 @@ AccountSignup = React.createClass({
     // Get the current user
     getMeteorData() {
         return {
-            currentUserId: Meteor.userId()
+            currentUser: Meteor.user()
         };
     },
 
@@ -56,7 +56,7 @@ AccountSignup = React.createClass({
                 console.log('Sign Up Successful');
             }
 
-            let routeString = '/queue/' + Meteor.userId().toString();
+            let routeString = '/' + Meteor.user().username + '/queue';
             FlowRouter.go(routeString);
         });
 
