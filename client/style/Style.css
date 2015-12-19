@@ -25,13 +25,14 @@ h6,
 .scroll-col {
     overflow: auto;
     max-height: 530px;
-    /* box-shadow: 0 6px 8px -8px black; */
     border-radius: 9px;
+    counter-reset: section;
 }
-.panel-body:before {
-    /* counter-increment: section; */
-    /* content: counter(section)" "; */
-    float: left;
+.scroll-col .panel-body:before {
+    counter-increment: section;
+    content: counter(section) ". ";
+    margin-top: 3px;
+    margin-right: 10px;
 }
 .btn-sm,
 .btn-group-sm > .btn {
@@ -57,4 +58,18 @@ h6,
     outline: none;
     border-color: #9ecaed;
     box-shadow: 0 0 10px #9ecaed;
+}
+.flex-container {
+    display: flex;
+}
+.flex-item {
+    order: 1;
+    flex-grow: 1;
+}
+.back-btn {
+    margin-top: 20px;
+    margin-bottom: 10px;
+}
+.align-right {
+    text-align: right;
 }

@@ -24,8 +24,8 @@ Header = React.createClass({
     accountLogout() {
         if (confirm('Are you sure you want to logout?')) {
             Meteor.logout();
+            FlowRouter.go('/');
         }
-        FlowRouter.go('/');
     },
 
     // Signup route
@@ -36,6 +36,12 @@ Header = React.createClass({
     // Queue route
     queueRoute() {
         let routeString = '/' + this.data.currentUser.username.toString() + '/queue';
+        FlowRouter.go(routeString);
+    },
+
+    // Profile route
+    profileRoute() {
+        let routeString = '/' + this.data.currentUser.username.toString() + '/profile/settings';
         FlowRouter.go(routeString);
     },
 
@@ -63,8 +69,29 @@ Header = React.createClass({
                         <ul className="nav navbar-nav navbar-right">
                             <li>
                                 <a onClick={this.queueRoute}>
-                                    {this.data.currentUser.username}
+                                    Queue
                                 </a>
+                            </li>
+                            <li className="dropdown">
+                                <a
+                                    className="dropdown-toggle"
+                                    data-toggle="dropdown"
+                                    role="button" aria-haspopup="true"
+                                    aria-expanded="false">
+                                    {this.data.currentUser.username} <span className="caret"></span>
+                                </a>
+                                <ul className="dropdown-menu">
+                                    <li>
+                                        <a>
+                                            Profile
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a onClick={this.profileRoute}>
+                                            Settings
+                                        </a>
+                                    </li>
+                                </ul>
                             </li>
                             <li>
                                 <a onClick={this.accountLogout}>Logout</a>

@@ -6,7 +6,7 @@ QueueSubmit = React.createClass({
     // Grab the data
     getMeteorData() {
         return {
-            currentUsername: Meteor.user().username
+            //currentUsername: Meteor.user().username
         };
     },
 
@@ -46,17 +46,30 @@ QueueSubmit = React.createClass({
                 return toastr.error(error.message);
             }
 
-            let routeString = '/' + this.data.currentUsername.toString() + '/queue';
-
+            let routeString = '/' + Meteor.user().username + '/queue';
             FlowRouter.go(routeString);
         });
+    },
+
+    queueRoute() {
+        let routeString = '/' + Meteor.user().username + '/queue';
+        FlowRouter.go(routeString);
     },
 
     // Render Function
     render() {
         return (
             <div className="queue-submit">
-                <h1>Submit</h1>
+                <div className="flex-container">
+                    <div className="flex-item">
+                        <h1>Submit</h1>
+                    </div>
+                    <div onClick={this.queueRoute} className="flex-item align-right">
+                        <button className="btn btn-danger back-btn">
+                            Back
+                        </button>
+                    </div>
+                </div>
                 <hr />
                 <form>
                     <div className="form-group">

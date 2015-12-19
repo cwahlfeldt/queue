@@ -22,6 +22,7 @@ const admin = FlowRouter.group({
     }
 });
 
+// Global 404 for all paths not recognized
 FlowRouter.notFound = {
     name: '404',
     action() {
@@ -32,9 +33,49 @@ FlowRouter.notFound = {
 };
 
 //
+// admin Routes
+//
+admin.route('/queue', {
+    name: 'Queue',
+    action() {
+        ReactLayout.render(App, {
+            content: <QueueList />
+        });
+    }
+});
+
+admin.route('/submit', {
+    name: 'Submit',
+    action() {
+        ReactLayout.render(App, {
+            content: <QueueSubmit />
+        });
+    }
+});
+
+admin.route('/edit/:queuerName/:queuerId', {
+    name: 'Edit',
+    action(params, queryParams) {
+        ReactLayout.render(App, {
+            content: <QueuerEdit
+                        queuerId={params.queuerId}
+                        queuerName={params.queuerName} />
+        });
+    }
+});
+
+admin.route('/profile/settings', {
+    name: 'Settings',
+    action(params, queryParams) {
+        ReactLayout.render(App, {
+            content: <Settings username={params.username} />
+        });
+    }
+});
+
+//
 // exposed Routes
 //
-
 exposed.route('/', {
     name: 'Home',
     action() {
@@ -75,37 +116,7 @@ exposed.route('/password-reset/:token', {
     name: 'Password Reset',
     action(params, queryParams) {
         ReactLayout.render(App, {
-            content: <AccountReset token={params.token}/>
-        });
-    }
-});
-
-//
-// admin Routes
-//
-admin.route('/queue', {
-    name: 'Queue',
-    action() {
-        ReactLayout.render(App, {
-            content: <QueueList />
-        });
-    }
-});
-
-admin.route('/submit', {
-    name: 'Submit',
-    action() {
-        ReactLayout.render(App, {
-            content: <QueueSubmit />
-        });
-    }
-});
-
-admin.route('/edit/:queuerName/:queuerId', {
-    name: 'Edit',
-    action(params, queryParams) {
-        ReactLayout.render(App, {
-            content: <QueuerEdit queuerId={params.queuerId} queuerName={params.queuerName} />
+            content: <AccountReset token={params.token} />
         });
     }
 });

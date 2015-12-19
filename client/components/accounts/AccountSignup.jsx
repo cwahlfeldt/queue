@@ -1,15 +1,5 @@
 // Signup component
 AccountSignup = React.createClass({
-    // Allow getMeteorData
-    mixins: [ReactMeteorData],
-
-    // Get the current user
-    getMeteorData() {
-        return {
-            currentUser: Meteor.user()
-        };
-    },
-
     // Component is all loaded and ready to go
     componentDidMount() {
         let usernameInput = this.refs.usernameInput;

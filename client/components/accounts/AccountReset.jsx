@@ -10,6 +10,8 @@ AccountReset = React.createClass({
             passResetToken: this.props.token
         };
     },
+
+    // Send the reset email
     resetEmail(e) {
         e.preventDefault();
 
@@ -27,6 +29,8 @@ AccountReset = React.createClass({
             return toastr.error('Please use valid email address');
         }
     },
+
+    // Reset the password in app
     resetPassword(e) {
         e.preventDefault();
 

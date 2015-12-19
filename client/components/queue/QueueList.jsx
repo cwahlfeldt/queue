@@ -16,7 +16,6 @@ QueueList = React.createClass({
 
     // Did component load
     componentDidMount() {
-        //console.log($('.scroll-col').height());
     },
 
     // Render out all queuers based on each queuer in the DB
@@ -50,10 +49,14 @@ QueueList = React.createClass({
                 <hr />
                 { this.data.currentUser ?
                 <div className="col-md-4 col-sm-4">
-                    <button onClick={this.submitRoute} className="btn btn-primary btn-lg btn-block">
+                    <button
+                        onClick={this.submitRoute}
+                        className="btn btn-primary btn-lg btn-block">
                         Add Person
                     </button>
-                    <button onClick={this.clearQueue} className="btn btn-danger btn-lg btn-block">
+                    <button
+                        onClick={this.clearQueue}
+                        className="btn btn-danger btn-lg btn-block">
                         Clear Queue
                     </button>
                 </div>
