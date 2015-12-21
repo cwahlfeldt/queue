@@ -36,7 +36,8 @@ AccountSignup = React.createClass({
         Accounts.createUser({
             username: username,
             email: email,
-            password: password
+            password: password,
+            profile: {}
         }, (error) => {
             if (error) {
                 toastr.error(error.message);

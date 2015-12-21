@@ -73,3 +73,6 @@ h6,
 .align-right {
     text-align: right;
 }
+.nav-btns > .btn {
+    text-align: left !important;
+}

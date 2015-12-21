@@ -65,10 +65,37 @@ admin.route('/edit/:queuerName/:queuerId', {
 });
 
 admin.route('/profile/settings', {
-    name: 'Settings',
+    name: 'User Settings',
     action(params, queryParams) {
         ReactLayout.render(App, {
-            content: <Settings username={params.username} />
+            content: <ProfileSettings />
+        });
+    }
+});
+
+admin.route('/account/settings', {
+    name: 'User Settings',
+    action(params, queryParams) {
+        ReactLayout.render(App, {
+            content: <AccountSettings />
+        });
+    }
+});
+
+admin.route('/emails/settings', {
+    name: 'User Settings',
+    action(params, queryParams) {
+        ReactLayout.render(App, {
+            content: <EmailsSettings />
+        });
+    }
+});
+
+admin.route('/billing/settings', {
+    name: 'User Settings',
+    action(params, queryParams) {
+        ReactLayout.render(App, {
+            content: <BillingSettings />
         });
     }
 });
