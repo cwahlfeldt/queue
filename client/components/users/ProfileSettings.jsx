@@ -63,10 +63,26 @@ ProfileSettings = React.createClass({
                         <hr />
                         <div className="col-md-4 col-sm-4">
                             <div className="btn-group-vertical btn-block nav-btns">
-                                <button onClick={this.profileSettingsRoute} className="active btn btn-default">Profile</button>
-                                <button onClick={this.accountSettingsRoute} className="btn btn-default">Account Settings</button>
-                                <button onClick={this.emailsSettingsRoute} className="btn btn-default">Emails</button>
-                                <button onClick={this.billingSettingsRoute} className="btn btn-default">Billing</button>
+                                <button
+                                    onClick={this.profileSettingsRoute}
+                                    className="active btn btn-default">
+                                        Profile
+                                    </button>
+                                <button
+                                    onClick={this.accountSettingsRoute}
+                                    className="btn btn-default">
+                                        Account Settings
+                                    </button>
+                                <button
+                                    onClick={this.emailsSettingsRoute}
+                                    className="btn btn-default">
+                                        Emails
+                                    </button>
+                                <button
+                                    onClick={this.billingSettingsRoute}
+                                    className="btn btn-default">
+                                        Billing
+                                    </button>
                             </div>
                         </div>
                         <div className="col-md-8 col-sm-8">

@@ -51,6 +51,11 @@ AccountSettings = React.createClass({
         FlowRouter.go(route);
     },
 
+    // reset password route
+    resetRoute() {
+        FlowRouter.go('/password-reset');
+    },
+
     // Render function
     render() {
         let user = this.data.user;
@@ -63,10 +68,26 @@ AccountSettings = React.createClass({
                         <hr />
                         <div className="col-md-4 col-sm-4">
                             <div className="btn-group-vertical btn-block nav-btns">
-                                <button onClick={this.profileSettingsRoute} className="btn btn-default">Profile</button>
-                                <button onClick={this.accountSettingsRoute} className="active btn btn-default">Account Settings</button>
-                                <button onClick={this.emailsSettingsRoute} className="btn btn-default">Emails</button>
-                                <button onClick={this.billingSettingsRoute} className="btn btn-default">Billing</button>
+                                <button
+                                    onClick={this.profileSettingsRoute}
+                                    className="btn btn-default">
+                                    Profile
+                                </button>
+                                <button
+                                    onClick={this.accountSettingsRoute}
+                                    className="active btn btn-default">
+                                    Account Settings
+                                </button>
+                                <button
+                                    onClick={this.emailsSettingsRoute}
+                                    className="btn btn-default">
+                                    Emails
+                                </button>
+                                <button
+                                    onClick={this.billingSettingsRoute}
+                                    className="btn btn-default">
+                                    Billing
+                                </button>
                             </div>
                         </div>
                         <div className="col-md-8 col-sm-8">
@@ -77,26 +98,67 @@ AccountSettings = React.createClass({
                                 <div className="panel-body">
                                     <form className="profile-settings">
                                         <div className="form-group">
-                                            <label>Business Name</label>
+                                            <label>Change Username</label>
                                             <input
-                                                ref="businessNameInput"
+                                                ref="usernameInput"
                                                 className="form-control"
                                                 type="text"
-                                                placeholder="Business Name" />
+                                                placeholder="New Username" />
                                         </div>
                                         <div className="form-group">
-                                            <label>Location</label>
+                                            <button
+                                                onClick={this.changeUsername}
+                                                className="btn btn-success">
+                                                Change Username
+                                            </button>
+                                        </div>
+                                        <div className="form-group">
+                                            <label>Change Password</label>
                                             <input
-                                                ref="locationInput"
+                                                ref="passwordInput"
                                                 className="form-control"
                                                 type="text"
-                                                placeholder="Location" />
+                                                placeholder="Old Password" />
+                                        </div>
+                                        <div className="form-group">
+                                            <input
+                                                ref="confirmPasswordInput"
+                                                className="form-control"
+                                                type="text"
+                                                placeholder="New Password" />
+                                        </div>
+                                        <div className="form-group">
+                                            <input
+                                                ref="confirmPasswordInput"
+                                                className="form-control"
+                                                type="text"
+                                                placeholder="Confrim New Password" />
                                         </div>
                                         <div className="form-group">
                                             <button
                                                 onClick={this.updateProfile}
                                                 className="btn btn-success">
-                                                Update Profile
+                                                Update Password
+                                            </button>
+                                            <a onClick={this.resetRoute}> Forgot password?</a>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                            <div className="panel panel-danger">
+                                <div className="panel-heading">
+                                    Delete Account
+                                </div>
+                                <div className="panel-body">
+                                    <form className="profile-settings">
+                                        <div className="form-group">
+                                            <p>Beware! This is permanent. This cannot be undone.</p>
+                                        </div>
+                                        <div className="form-group">
+                                            <button
+                                                onClick={this.deleteAccount}
+                                                className="btn btn-danger">
+                                                Delete Account
                                             </button>
                                         </div>
                                     </form>
