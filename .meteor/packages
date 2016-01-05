@@ -24,3 +24,7 @@ accounts-password
 accounts-base
 chrismbeckett:toastr
 meteortoys:allthings
+cfs:standard-packages
+cfs:gridfs
+meteorhacks:fast-render
+shadyendless:react-bootstrap

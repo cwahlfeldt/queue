@@ -48,7 +48,7 @@ Queuer = React.createClass({
             username = Meteor.user().username,
             id = this.props.queuer._id;
 
-        FlowRouter.go('/' + username + '/edit/' + queuerName + '/' + id);
+        FlowRouter.go('/' + username + '/' + this.props.queueName + '/edit/' + queuerName + '/' + id);
     },
 
     // Render function

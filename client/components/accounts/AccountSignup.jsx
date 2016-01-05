@@ -37,8 +37,12 @@ AccountSignup = React.createClass({
             username: username,
             email: email,
             password: password,
-            profile: {}
-        }, (error) => {
+            profile: {
+                businessName: null,
+                location: null,
+                queues: []
+            }
+        }, error => {
             if (error) {
                 toastr.error(error.message);
                 console.log(error.message);
@@ -47,7 +51,7 @@ AccountSignup = React.createClass({
                 console.log('Sign Up Successful');
             }
 
-            let routeString = '/' + Meteor.user().username + '/queue';
+            let routeString = '/' + Meteor.user().username + '/profile';
             FlowRouter.go(routeString);
         });
 

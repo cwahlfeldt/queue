@@ -39,9 +39,8 @@ Header = React.createClass({
         FlowRouter.go(routeString);
     },
 
-    // Profile route
     profileRoute() {
-        let routeString = '/' + this.data.currentUser.username.toString() + '/profile/settings';
+        let routeString = '/' + this.data.currentUser.username.toString() + '/profile';
         FlowRouter.go(routeString);
     },
 
@@ -65,33 +64,12 @@ Header = React.createClass({
                         <a className="navbar-brand" onClick={this.homeRoute}>Queue</a>
                     </div>
                     <div className="collapse navbar-collapse" id="navbar-collapse">
-                        { this.data.currentUser ?
+                        {this.data.currentUser ?
                         <ul className="nav navbar-nav navbar-right">
                             <li>
-                                <a onClick={this.queueRoute}>
-                                    Queue
+                                <a onClick={this.profileRoute}>
+                                    {this.data.currentUser.username}
                                 </a>
-                            </li>
-                            <li className="dropdown">
-                                <a
-                                    className="dropdown-toggle"
-                                    data-toggle="dropdown"
-                                    role="button" aria-haspopup="true"
-                                    aria-expanded="false">
-                                    {this.data.currentUser.username} <span className="caret"></span>
-                                </a>
-                                <ul className="dropdown-menu">
-                                    <li>
-                                        <a>
-                                            Profile
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a onClick={this.profileRoute}>
-                                            Settings
-                                        </a>
-                                    </li>
-                                </ul>
                             </li>
                             <li>
                                 <a onClick={this.accountLogout}>Logout</a>

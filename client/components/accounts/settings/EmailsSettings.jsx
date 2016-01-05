@@ -9,33 +9,67 @@ EmailsSettings = React.createClass({
         };
     },
 
-    updateProfile(e) {
-        e.preventDefault();
-
-        let publicProfile = {
-            userId: Meteor.userId(),
-            businessName: this.refs.businessNameInput.value.trim(),
-            location: this.refs.locationInput.value.trim()
-        };
-
-        Meteor.call('updatePublicProfile', publicProfile, (error) => {
-            if (error) {
-                return toastr.error(error.message);
-            }
-
-            toastr.success(this.data.user.username + '\'s public profile, updated');
+    // returns all emails for this account
+    getEmails() {
+        return this.data.user.emails.map(email => {
+            return (
+                <li key={email.address} id={email.address} className="list-group-item">
+                    {email.address}
+                    <span
+                        onClick={this.removeEmail}
+                        className="glyphicon glyphicon-trash pull-right"
+                        aria-hidden="true">
+                    </span>
+                </li>
+            );
         });
     },
 
-    // returns all emails for this account
-    getEmails() {
-        return this.data.user.emails.map((email) => {
-            return <input
-                      key={email.address}
-                      type="email"
-                      className="form-control"
-                      defaultValue={email.address} />;
-        });
+    // Add a new email
+    addEmail(e) {
+        e.preventDefault();
+
+        let emailInfo = {
+            email: trimInput(this.refs.emailInput.value),
+            userId: Meteor.userId()
+        };
+
+        if (isEmail(emailInfo.email)) {
+            Meteor.call('addEmail', emailInfo, error => {
+                if (error) {
+                    return toastr.error(error.message);
+                }
+
+                this.refs.emailInput.value = '';
+                toastr.success(emailInfo.email + ' has been added');
+            });
+        } else {
+            toastr.error('Must enter a valid email');
+        }
+    },
+
+    // Remove an email
+    removeEmail(e) {
+        e.preventDefault();
+
+        if (Meteor.user().emails.length > 1) {
+            let emailInfo = {
+                email: e.target.parentNode.id,
+                userId: Meteor.userId()
+            };
+
+            if (confirm('Are you sure you want to remove this email?')) {
+                Meteor.call('removeEmail', emailInfo, error => {
+                    if (error) {
+                        return toastr.error(error.message);
+                    }
+
+                    toastr.success(emailInfo.email + ' removed');
+                });
+            }
+        } else {
+            toastr.error('Must have one active email');
+        }
     },
 
     // account settings route
@@ -102,33 +136,26 @@ EmailsSettings = React.createClass({
                                     Email Settings
                                 </div>
                                 <div className="panel-body">
+                                    <label>Emails</label>
+                                    <ul className="list-group">
+                                        {this.getEmails()}
+                                    </ul>
                                     <form className="profile-settings">
                                         <div className="form-group">
-                                            <label>Upload Logo</label>
-                                            <input type="File" />
-                                        </div>
-                                        <div className="form-group">
-                                            <label>Business Name</label>
-                                            <input
-                                                ref="businessNameInput"
-                                                className="form-control"
-                                                type="text"
-                                                placeholder="Business Name" />
-                                        </div>
-                                        <div className="form-group">
-                                            <label>Location</label>
-                                            <input
-                                                ref="locationInput"
-                                                className="form-control"
-                                                type="text"
-                                                placeholder="Location" />
-                                        </div>
-                                        <div className="form-group">
-                                            <button
-                                                onClick={this.updateProfile}
-                                                className="btn btn-success">
-                                                Update Profile
-                                            </button>
+                                            <label>Add Emails</label>
+                                            <div className="input-group">
+                                                <input
+                                                    ref="emailInput"
+                                                    type="text"
+                                                    className="form-control" />
+                                                <span className="input-group-btn">
+                                                    <button
+                                                        onClick={this.addEmail}
+                                                        className="btn btn-success">
+                                                        Add Email
+                                                    </button>
+                                                </span>
+                                            </div>
                                         </div>
                                     </form>
                                 </div>

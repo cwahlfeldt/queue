@@ -9,22 +9,81 @@ AccountSettings = React.createClass({
         };
     },
 
-    updateProfile(e) {
+    changeUsername(e) {
         e.preventDefault();
 
-        let publicProfile = {
-            userId: Meteor.userId(),
-            businessName: this.refs.businessNameInput.value.trim(),
-            location: this.refs.locationInput.value.trim()
+        let userInfo = {
+            username: trimInput(this.refs.usernameInput.value),
+            userId: Meteor.userId()
         };
 
-        Meteor.call('updatePublicProfile', publicProfile, (error) => {
+        Meteor.call('changeUsername', userInfo, error => {
+            if (error) {
+                this.refs.usernameInput.value = Meteor.user().username;
+                this.refs.usernameInput.focus();
+                this.refs.usernameInput.focus();
+                return toastr.error(error.message);
+            }
+
+            toastr.success('Updated Username to: ' + userInfo.username);
+        });
+    },
+
+    changePassword(e) {
+        e.preventDefault();
+
+        let oldPassword = trimInput(this.refs.oldPasswordInput.value),
+            newPassword = trimInput(this.refs.newPasswordInput.value),
+            confirmPassword = trimInput(this.refs.confirmPasswordInput.value);
+
+        if (oldPassword === '') {
+            this.refs.oldPasswordInput.select();
+            this.refs.oldPasswordInput.focus();
+            return toastr.error('Must enter old password');
+        }
+
+        if (newPassword === '') {
+            this.refs.newPasswordInput.selct();
+            this.refs.newPasswordInput.focus();
+            return toastr.error('Must enter new password');
+        }
+
+        if (newPassword !== confirmPassword) {
+            this.refs.confirmPasswordInput.select();
+            this.refs.confirmPasswordInput.focus();
+            return toastr.error('Confirm password must match');
+        }
+
+        Accounts.changePassword(oldPassword, newPassword, error => {
             if (error) {
                 return toastr.error(error.message);
             }
 
-            toastr.success(this.data.user.username + '\'s public profile, updated');
+            this.refs.oldPasswordInput.value = '';
+            this.refs.newPasswordInput.value = '';
+            this.refs.confirmPasswordInput.value = '';
+
+            toastr.success('Successfully updated password');
         });
+    },
+
+    deleteAccount(e) {
+        e.preventDefault();
+
+        if (confirm('Are you sure you want to delete this account?')) {
+            FlowRouter.go('/');
+            Meteor.call('deleteUser', Meteor.userId(), error => {
+                if (error) {
+                    return toastr.error(error.message);
+                }
+
+                if (Meteor.user().profile.logoId) {
+                    Logos.remove(Meteor.user().profile.logoId);
+                }
+
+                toastr.warning('Account deleted');
+            });
+        }
     },
 
     // account settings route
@@ -58,7 +117,7 @@ AccountSettings = React.createClass({
 
     // Render function
     render() {
-        let user = this.data.user;
+        let user = Meteor.user();
 
         return (
             <div className="profile">
@@ -98,45 +157,48 @@ AccountSettings = React.createClass({
                                 <div className="panel-body">
                                     <form className="profile-settings">
                                         <div className="form-group">
-                                            <label>Change Username</label>
-                                            <input
-                                                ref="usernameInput"
-                                                className="form-control"
-                                                type="text"
-                                                placeholder="New Username" />
-                                        </div>
-                                        <div className="form-group">
-                                            <button
-                                                onClick={this.changeUsername}
-                                                className="btn btn-success">
-                                                Change Username
-                                            </button>
+                                            <label>Username</label>
+                                            <div className="input-group">
+                                                <input
+                                                    ref="usernameInput"
+                                                    className="form-control"
+                                                    type="text"
+                                                    defaultValue={user.username}
+                                                    placeholder="New Username" />
+                                                <span className="input-group-btn">
+                                                    <button
+                                                        onClick={this.changeUsername}
+                                                        className="btn btn-success">
+                                                        Change Username
+                                                    </button>
+                                                </span>
+                                            </div>
                                         </div>
                                         <div className="form-group">
                                             <label>Change Password</label>
                                             <input
-                                                ref="passwordInput"
+                                                ref="oldPasswordInput"
                                                 className="form-control"
-                                                type="text"
+                                                type="password"
                                                 placeholder="Old Password" />
                                         </div>
                                         <div className="form-group">
                                             <input
-                                                ref="confirmPasswordInput"
+                                                ref="newPasswordInput"
                                                 className="form-control"
-                                                type="text"
+                                                type="password"
                                                 placeholder="New Password" />
                                         </div>
                                         <div className="form-group">
                                             <input
                                                 ref="confirmPasswordInput"
                                                 className="form-control"
-                                                type="text"
-                                                placeholder="Confrim New Password" />
+                                                type="password"
+                                                placeholder="Confirm New Password" />
                                         </div>
                                         <div className="form-group">
                                             <button
-                                                onClick={this.updateProfile}
+                                                onClick={this.changePassword}
                                                 className="btn btn-success">
                                                 Update Password
                                             </button>
@@ -152,7 +214,9 @@ AccountSettings = React.createClass({
                                 <div className="panel-body">
                                     <form className="profile-settings">
                                         <div className="form-group">
-                                            <p>Beware! This is permanent. This cannot be undone.</p>
+                                            <p>Beware! This is permanent.
+                                             This cannot be undone.
+                                             Your billing will be cancelled.</p>
                                         </div>
                                         <div className="form-group">
                                             <button
@@ -173,4 +237,3 @@ AccountSettings = React.createClass({
         );
     }
 });
-

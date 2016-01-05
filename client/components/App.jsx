@@ -8,6 +8,7 @@ App = React.createClass({
                 <div className="container">
                     {this.props.content}
                 </div>
+                <Overlay showModal={this.props.showModal} body={this.props.modalContent} />
             </div>
         );
     }

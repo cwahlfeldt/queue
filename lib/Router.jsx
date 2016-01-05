@@ -16,11 +16,12 @@ const admin = FlowRouter.group({
             FlowRouter.go('/login');
         }
     }],
-    prefix: '/:username',
-    subscriptions() {
-        Meteor.subscribe('queuers', Meteor.userId());
-    }
+    prefix: '/:username'
 });
+
+FlowRouter.subscriptions = () => {
+    Meteor.subscribe('logos');
+};
 
 // Global 404 for all paths not recognized
 FlowRouter.notFound = {
@@ -44,17 +45,32 @@ admin.route('/queue', {
     }
 });
 
-admin.route('/submit', {
-    name: 'Submit',
-    action() {
+admin.route('/:queueName/queue', {
+    name: 'Custom Queue',
+    subscriptions(params, queryParams) {
+        Meteor.subscribe('queuers', Meteor.userId(), params.queueName);
+    },
+    action(params, queryParams) {
         ReactLayout.render(App, {
-            content: <QueueSubmit />
+            content: <QueueList name={params.queueName} />
         });
     }
 });
 
-admin.route('/edit/:queuerName/:queuerId', {
+admin.route('/:queueName/submit', {
+    name: 'Submit',
+    action(params, queryParams) {
+        ReactLayout.render(App, {
+            content: <QueueSubmit queueName={params.queueName}/>
+        });
+    }
+});
+
+admin.route('/:queueName/edit/:queuerName/:queuerId', {
     name: 'Edit',
+    subscriptions(params, queryParams) {
+        Meteor.subscribe('queuers', Meteor.userId(), params.queueName);
+    },
     action(params, queryParams) {
         ReactLayout.render(App, {
             content: <QueuerEdit
@@ -64,8 +80,20 @@ admin.route('/edit/:queuerName/:queuerId', {
     }
 });
 
+admin.route('/profile', {
+    name: 'Profile',
+    subscriptions() {
+        Meteor.subscribe('allQueuers', Meteor.userId());
+    },
+    action() {
+        ReactLayout.render(App, {
+            content: <AccountProfile />
+        });
+    }
+});
+
 admin.route('/profile/settings', {
-    name: 'User Settings',
+    name: 'Profile Settings',
     action(params, queryParams) {
         ReactLayout.render(App, {
             content: <ProfileSettings />
@@ -74,7 +102,7 @@ admin.route('/profile/settings', {
 });
 
 admin.route('/account/settings', {
-    name: 'User Settings',
+    name: 'Account Settings',
     action(params, queryParams) {
         ReactLayout.render(App, {
             content: <AccountSettings />
@@ -83,7 +111,7 @@ admin.route('/account/settings', {
 });
 
 admin.route('/emails/settings', {
-    name: 'User Settings',
+    name: 'Email Settings',
     action(params, queryParams) {
         ReactLayout.render(App, {
             content: <EmailsSettings />
@@ -92,7 +120,7 @@ admin.route('/emails/settings', {
 });
 
 admin.route('/billing/settings', {
-    name: 'User Settings',
+    name: 'Billing Settings',
     action(params, queryParams) {
         ReactLayout.render(App, {
             content: <BillingSettings />

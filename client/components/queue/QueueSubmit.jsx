@@ -25,7 +25,8 @@ QueueSubmit = React.createClass({
         let queuer = {
             name: toTitleCase(this.refs.nameInput.value),
             partySize: this.refs.partySizeInput.value,
-            phoneNumber: this.refs.phoneInput.value
+            phoneNumber: this.refs.phoneInput.value,
+            queueName: this.props.queueName
         };
 
         // Queuer info must be available
@@ -46,13 +47,12 @@ QueueSubmit = React.createClass({
                 return toastr.error(error.message);
             }
 
-            let routeString = '/' + Meteor.user().username + '/queue';
-            FlowRouter.go(routeString);
+            this.queueRoute();
         });
     },
 
     queueRoute() {
-        let routeString = '/' + Meteor.user().username + '/queue';
+        let routeString = '/' + Meteor.user().username + '/' + this.props.queueName + '/queue';
         FlowRouter.go(routeString);
     },
 

@@ -32,13 +32,13 @@ QueuerEdit = React.createClass({
                 return toastr.error(error.message);
             }
 
-            FlowRouter.go('/' + Meteor.user().username + '/queue');
+            this.queueRoute();
             toastr.success('Edited ' + '\"' + queuer.name + '\"');
         });
     },
 
     queueRoute() {
-        let routeString = '/' + Meteor.user().username + '/queue';
+        let routeString = '/' + Meteor.user().username + '/' + this.data.queuer.queueName + '/queue';
         FlowRouter.go(routeString);
     },
 
@@ -51,7 +51,9 @@ QueuerEdit = React.createClass({
                         <h1>Edit "{this.props.queuerName}"</h1>
                     </div>
                     <div className="flex-item align-right">
-                        <button onClick={this.queueRoute} className="btn btn-danger back-btn">
+                        <button
+                            onClick={this.queueRoute}
+                            className="btn btn-danger back-btn">
                             Back
                         </button>
                     </div>
